@@ -90,4 +90,14 @@ class AuthRepository {
       showSnackBar(context: context, content: e.toString());
     }
   }
+
+  Future<UserModel?> getUserCurrentData()async{
+    var userdata = await firestore.collection('user').doc(auth.currentUser?.uid).get(); //get user data form database
+    UserModel? user;
+    if(userdata.data() != null){
+      user =UserModel.fromMap(userdata.data()!);
+
+    }
+    return user;
+  }
 }

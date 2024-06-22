@@ -51,9 +51,9 @@ class _UserInformationScreenState extends ConsumerState<UserInformationScreen> {
                     //     Icons.account_circle,
                     //     size: 100,
                     //   )
-                    ? const CircleAvatar(
+                    ?  CircleAvatar(
                         backgroundImage:
-                            NetworkImage(defaultBackgroundImageUrl),
+                            NetworkImage(defaultBackgroundImageUrl.trim()),
                         radius: 64,
                       )
                     // https://png.pngitem.com/pimgs/s/24-248226_computer-icons-user-profile-clip-art-login-user.png
