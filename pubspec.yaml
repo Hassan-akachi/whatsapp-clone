@@ -37,6 +37,7 @@ dependencies:
 
   country_picker:
   image_picker:
+  flutter_contacts:
 
  #firebase
   firebase_auth:

@@ -32,8 +32,11 @@ class MyApp extends ConsumerWidget {
           scaffoldBackgroundColor: backgroundColor,
           appBarTheme: const AppBarTheme(backgroundColor: appBarColor)),
       home: ref.watch(userDataAuthProvider).when(
+
           data: (user) {
+            print("user is $user )))))))))))))))))))))))))))");
             if (user == null) {
+
               return const LandingScreen();
             }
             return const MobileLayoutScreen();

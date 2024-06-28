@@ -80,9 +80,9 @@ class AuthRepository {
 
       var user = UserModel(name: name,
           uid: uid,
-          profilePics: photoUrl,
+          profilePic: photoUrl,
           isOnline: true,
-          phoneNumber: auth.currentUser!.uid,
+          phoneNumber: auth.currentUser!.phoneNumber!,
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
       Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MobileLayoutScreen()), (route) => false);
@@ -91,7 +91,9 @@ class AuthRepository {
     }
   }
 
-  Future<UserModel?> getUserCurrentData()async{
+
+
+  Future<UserModel?> getUserCurrentData()async{// get the user data for the login user
     var userdata = await firestore.collection('user').doc(auth.currentUser?.uid).get(); //get user data form database
     UserModel? user;
     if(userdata.data() != null){
@@ -100,4 +102,5 @@ class AuthRepository {
     }
     return user;
   }
+
 }
