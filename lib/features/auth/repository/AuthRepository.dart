@@ -14,9 +14,8 @@ import 'package:whatsapp_ui/features/auth/screen/user_information_screen.dart';
 import 'package:whatsapp_ui/model/user_model.dart';
 import 'package:whatsapp_ui/screens/mobile_layout_screen.dart';
 
-final authRepositoryProvider = Provider((ref) =>
-    AuthRepository(
-        auth: FirebaseAuth.instance, firestore: FirebaseFirestore.instance));
+final authRepositoryProvider = Provider((ref) => AuthRepository(
+    auth: FirebaseAuth.instance, firestore: FirebaseFirestore.instance));
 
 class AuthRepository {
   final FirebaseAuth auth;
@@ -49,11 +48,11 @@ class AuthRepository {
   }
 
   void verifyOtp( //
-          {
-        required BuildContext context,
-        required String verificationId,
-        required String userOTP,
-      }) async {
+      {
+    required BuildContext context,
+    required String verificationId,
+    required String userOTP,
+  }) async {
     try {
       PhoneAuthCredential credential = PhoneAuthProvider.credential(
           verificationId: verificationId, smsCode: userOTP);
@@ -65,10 +64,11 @@ class AuthRepository {
     }
   }
 
-  void saveUserDataToFirebase({required String name,
-    required File? profilePic,
-    required ProviderRef ref,
-    required BuildContext context}) async {
+  void saveUserDataToFirebase(
+      {required String name,
+      required File? profilePic,
+      required ProviderRef ref,
+      required BuildContext context}) async {
     try {
       String uid = auth.currentUser!.uid;
       String photoUrl = defaultBackgroundImageUrl;
@@ -78,29 +78,41 @@ class AuthRepository {
             .storeFileToFirebase('profilePic/$uid', profilePic);
       }
 
-      var user = UserModel(name: name,
+      var user = UserModel(
+          name: name,
           uid: uid,
           profilePic: photoUrl,
           isOnline: true,
           phoneNumber: auth.currentUser!.phoneNumber!,
           groupId: []);
       await firestore.collection('users').doc(uid).set(user.toMap());
-      Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const MobileLayoutScreen()), (route) => false);
+      Navigator.pushAndRemoveUntil(
+          context,
+          MaterialPageRoute(builder: (context) => const MobileLayoutScreen()),
+          (route) => false);
     } catch (e) {
       showSnackBar(context: context, content: e.toString());
     }
   }
 
-
-
-  Future<UserModel?> getUserCurrentData()async{// get the user data for the login user
-    var userdata = await firestore.collection('user').doc(auth.currentUser?.uid).get(); //get user data form database
+  Future<UserModel?> getUserCurrentData() async {
+    // get the user data for the login user
+    var userdata = await firestore
+        .collection('user')
+        .doc(auth.currentUser?.uid)
+        .get(); //get user data form database
     UserModel? user;
-    if(userdata.data() != null){
-      user =UserModel.fromMap(userdata.data()!);
-
+    if (userdata.data() != null) {
+      user = UserModel.fromMap(userdata.data()!);
     }
     return user;
   }
 
+  Stream<UserModel> userData(String userId) {
+    return firestore
+        .collection('users')
+        .doc(userId)
+        .snapshots()
+        .map((event) => UserModel.fromMap(event.data()!)); // it gets single user data
+  }
 }

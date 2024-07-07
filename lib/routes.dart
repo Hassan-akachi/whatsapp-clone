@@ -4,6 +4,7 @@ import 'package:whatsapp_ui/features/auth/screen/login_screen.dart';
 import 'package:whatsapp_ui/features/auth/screen/otp_screen.dart';
 import 'package:whatsapp_ui/features/auth/screen/user_information_screen.dart';
 import 'package:whatsapp_ui/features/select_contacts/screens/select_contact_screen.dart';
+import 'package:whatsapp_ui/model/user_model.dart';
 import 'package:whatsapp_ui/screens/mobile_chat_screen.dart';
 
 Route<dynamic> generateRoute(RouteSettings routeSettings) {
@@ -41,13 +42,16 @@ Route<dynamic> generateRoute(RouteSettings routeSettings) {
     //   );
 
     case MobileChatScreen.routeName:
+      final arguments = routeSettings.arguments as Map<String,dynamic>;
+      final String name=arguments['name'];
+      final String uid =arguments['uid'];
       return PageRouteBuilder(
         settings: routeSettings,
         transitionDuration: const Duration(milliseconds: 500),
         reverseTransitionDuration: const Duration(milliseconds: 200),
         pageBuilder: (context, animation, secondaryAnimation) => FadeTransition(
           opacity: animation,
-          child: MobileChatScreen(),
+          child: MobileChatScreen(name: name,uid: uid,),
         ),
       );
 
