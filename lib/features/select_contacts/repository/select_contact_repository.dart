@@ -5,7 +5,7 @@ import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_ui/common/util/custom_snackbar.dart';
 import 'package:whatsapp_ui/model/user_model.dart';
-import 'package:whatsapp_ui/screens/mobile_chat_screen.dart';
+import 'package:whatsapp_ui/features/chat/screen/mobile_chat_screen.dart';
 
 final selectContactRepositoryProvider = Provider((ref) {
   return SelectContactRepository(firebaseStore: FirebaseFirestore.instance);
@@ -52,7 +52,7 @@ class SelectContactRepository {
       }
       if (!isFound) {
         showSnackBar(
-            context: context, content: "contact is not registered in the app");
+            context: context, content: "contact is not registered in the app ${selectedContact.phones[0].number.toLowerCase()}");
       }
     } catch (e) {
 

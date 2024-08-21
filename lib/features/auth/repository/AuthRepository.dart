@@ -26,9 +26,34 @@ class AuthRepository {
     required this.firestore,
   });
 
+
+  Future<UserModel?> getCurrentUserData() async {
+    var userData =
+    await firestore.collection('users').doc(auth.currentUser?.uid).get();
+
+    UserModel? user;
+    if (userData.data() != null) {
+      user = UserModel.fromMap(userData.data()!);
+    }
+    return user;
+  }
+
+  // Future<UserModel?> getUserCurrentData() async {
+  //   User? user = auth.currentUser;
+  //   if (user != null) {
+  //     DocumentSnapshot userDoc =
+  //     await firestore.collection('users').doc(user.uid).get();
+  //     if (userDoc.exists) {
+  //       return UserModel.fromDocumentSnapshot(userDoc);
+  //     }
+  //   }
+  //   return null;
+  // }
+
   void signInWithPhone(BuildContext context, String phoneNumber) async {
     // setting phone
     try {
+      await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
       await auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
           verificationCompleted: (PhoneAuthCredential credential) async {
@@ -95,18 +120,7 @@ class AuthRepository {
     }
   }
 
-  Future<UserModel?> getUserCurrentData() async {
-    // get the user data for the login user
-    var userdata = await firestore
-        .collection('user')
-        .doc(auth.currentUser?.uid)
-        .get(); //get user data form database
-    UserModel? user;
-    if (userdata.data() != null) {
-      user = UserModel.fromMap(userdata.data()!);
-    }
-    return user;
-  }
+
 
   Stream<UserModel> userData(String userId) {
     return firestore

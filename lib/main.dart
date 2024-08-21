@@ -19,6 +19,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+  print("Firebase initialized successfully");
   runApp(
     const ProviderScope(
       child: MyApp(),
@@ -35,8 +36,12 @@ class MyApp extends ConsumerWidget {
       debugShowCheckedModeBanner: false,
       title: 'Whatsapp UI',
       theme: ThemeData.dark().copyWith(
-          scaffoldBackgroundColor: backgroundColor,
-          appBarTheme: const AppBarTheme(backgroundColor: appBarColor)),
+        scaffoldBackgroundColor: backgroundColor,
+        appBarTheme: const AppBarTheme(
+          color: appBarColor,
+        ),
+      ),
+      onGenerateRoute: (settings) => generateRoute(settings),
       home: ref.watch(userDataAuthProvider).when(
           data: (user) {
             print("User data received: $user");
@@ -55,7 +60,7 @@ class MyApp extends ConsumerWidget {
       //   mobileScreenLayout: LandingScreen(), //MobileLayoutScreen()
       //   webScreenLayout: WebLayoutScreen(),
       // ),
-      onGenerateRoute: (settings) => generateRoute(settings),
+
     );
   }
 }

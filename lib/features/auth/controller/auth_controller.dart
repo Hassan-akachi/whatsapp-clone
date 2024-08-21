@@ -14,13 +14,20 @@ final userDataAuthProvider = FutureProvider((ref) {
   return authController.getUserCurrentData();
 });
 
-
-
 class AuthController {
   final AuthRepository authRepository;
   final ProviderRef ref;
 
-  AuthController({required this.authRepository, required this.ref});
+  AuthController({
+    required this.authRepository,
+    required this.ref,
+  });
+
+  Future<UserModel?> getUserCurrentData() async {
+    UserModel? user = await authRepository.getCurrentUserData();
+    print("Fetched user data: $user");
+    return user;
+  }
 
   void signInWithPhone(BuildContext context, String phoneNumber) {
     authRepository.signInWithPhone(context, phoneNumber);
@@ -38,12 +45,7 @@ class AuthController {
         name: name, profilePic: profilePic, ref: ref, context: context);
   }
 
-  Future<UserModel?> getUserCurrentData() async {
-    UserModel? user = await authRepository.getUserCurrentData();
-    return user;
-  }
-
-  Stream<UserModel>userDataById(String userId){
+  Stream<UserModel> userDataById(String userId) {
     return authRepository.userData(userId);
   }
 }
