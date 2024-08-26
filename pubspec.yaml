@@ -39,6 +39,7 @@ dependencies:
   image_picker:
   flutter_contacts:
   uuid:
+  intl:
 
  #firebase
   firebase_auth:
