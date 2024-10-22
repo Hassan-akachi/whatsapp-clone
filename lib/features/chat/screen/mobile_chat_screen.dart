@@ -5,7 +5,7 @@ import 'package:whatsapp_ui/common/widgets/CustomLoader.dart';
 import 'package:whatsapp_ui/features/auth/controller/auth_controller.dart';
 import 'package:whatsapp_ui/info.dart';
 import 'package:whatsapp_ui/model/user_model.dart';
-import 'package:whatsapp_ui/widgets/chat_list.dart';
+import 'package:whatsapp_ui/features/chat/widgets/chat_list.dart';
 
 import '../widgets/bottom_chat_field.dart';
 

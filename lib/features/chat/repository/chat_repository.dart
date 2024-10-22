@@ -27,7 +27,7 @@ class ChatRepository {
       DateTime timeSent,
       String receiverUserId) async {
     // users -> receiver user id -> chats -> current user id -> set data
-    var recieverChatContact = ChatContact(
+    var receiverChatContact = ChatContact(
         name: senderUserData.name,
         profilePic: senderUserData.profilePic,
         contactId: senderUserData.uid,
@@ -38,10 +38,10 @@ class ChatRepository {
         .doc(receiverUserId)
         .collection('chats')
         .doc(auth.currentUser!.uid)
-        .set(recieverChatContact.toMap());
+        .set(receiverChatContact.toMap());
     // users -> current user id -> chats -> receiver user id -> set data
 
-    var SenderChatContact = ChatContact(
+    var senderChatContact = ChatContact(
         name: receivedUserData.name,
         profilePic: receivedUserData.profilePic,
         contactId: receivedUserData.uid,
@@ -52,7 +52,7 @@ class ChatRepository {
         .doc(auth.currentUser!.uid)
         .collection('chats')
         .doc(receiverUserId)
-        .set(SenderChatContact.toMap());
+        .set(senderChatContact.toMap());
   }
 
   void _saveMessageToMessageSubcollection({required String receiverUserId,
@@ -64,7 +64,7 @@ class ChatRepository {
     required MessageEnum messageType}) async {
     final message = Message(
         senderId: auth.currentUser!.uid,
-        receiverId: receiverUserId,
+        recieverid: receiverUserId,
         messageId: messageId,
         text: text,
         type: messageType,
@@ -131,6 +131,7 @@ class ChatRepository {
     }
   }
 
+  //gets the  chat list
   Stream<List<ChatContact>> getChatContacts() {
     //stream of list of latest chat form firebase
     return firestore

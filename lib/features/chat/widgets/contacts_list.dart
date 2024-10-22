@@ -8,7 +8,7 @@ import 'package:whatsapp_ui/features/chat/controller/chat_controller.dart';
 import 'package:whatsapp_ui/features/chat/screen/mobile_chat_screen.dart';
 import 'package:whatsapp_ui/model/chat_contact.dart';
 
-import '../features/select_contacts/select_contact_controller.dart';
+import '../../select_contacts/select_contact_controller.dart';
 
 class ContactsList extends ConsumerWidget {
   const ContactsList({Key? key}) : super(key: key);
@@ -26,7 +26,7 @@ class ContactsList extends ConsumerWidget {
       padding: const EdgeInsets.only(top: 10.0),
       child: StreamBuilder<List<ChatContact>>(
         //for live updates
-        stream: ref.watch(chatControllerProvider).getChatContacts(),
+        stream: ref.watch(chatControllerProvider).chatContacts(),
         builder: (context, snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return const CustomLoader();
