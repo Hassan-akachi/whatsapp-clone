@@ -163,21 +163,28 @@ class ChatRepository {
   }
 
   //update message screen
-  Stream<List<Message>> getChatStream(String recieverUserId) {
+  Stream<List<Message>> getChatStream(String receiverUserId) {
     return firestore
-        .collection("users")
+        .collection('users')
         .doc(auth.currentUser!.uid)
-        .collection("chats")
-        .doc(recieverUserId)
-        .collection("messages")
-        .orderBy('timeSent') //is sort the snapshot by timesent
+        .collection('chats')
+        .doc(receiverUserId)
+        .collection('messages')
+        .orderBy('timeSent', descending: false) // Sort by time sent in descending order
+        .limit(100) // Retrieve the 100 latest messages
         .snapshots()
-        .map((events) {
+        .map((snapshot) {
       List<Message> messages = [];
-      for (var document in events.docs) {
-        messages.add(Message.fromMap(document.data()));
+      for (var document in snapshot.docs) {
+        try {
+          messages.add(Message.fromMap(document.data()));
+        } catch (e) {
+          // Handle any parsing errors
+          print('Error parsing message: $e');
+        }
       }
       return messages;
     });
   }
+
 }

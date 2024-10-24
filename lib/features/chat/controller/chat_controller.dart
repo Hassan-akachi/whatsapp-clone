@@ -36,16 +36,15 @@ class ChatController {
             context: context,
             text: text,
             receiverUserId: recieverUserId,
-            senderUser: value!)
-    );
+            senderUser: value!));
   }
 
   //gets the  chat list
-Stream<List<ChatContact>> chatContacts(){
+  Stream<List<ChatContact>> chatContacts() {
     return chatRepository.getChatContacts();
-}
+  }
 
-Stream <List<Message>> chatStream(String recieverUserId) {
-  return chatRepository.getChatStream(recieverUserId);
-}
+  Stream<List<Message>> chatStream(String recieverUserId) {
+    return chatRepository.getChatStream(recieverUserId);
+  }
 }

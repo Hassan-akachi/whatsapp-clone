@@ -17,6 +17,7 @@ class _MobileLayoutScreenState extends ConsumerState<MobileLayoutScreen> with Wi
   @override
   void initState() {
     super.initState();
+    //call the instance of the widgetbinding observer to monitor the didChangeAppLifecycleState
     WidgetsBinding.instance.addObserver(this);
   }
 

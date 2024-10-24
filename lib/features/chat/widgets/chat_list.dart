@@ -24,44 +24,51 @@ class ChatList extends ConsumerStatefulWidget {
 
 class _ChatListState extends ConsumerState<ChatList> {
   final ScrollController messageController = ScrollController();
+  int previousMessageCount = 0;
 
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Message>>(
-        stream:
-            ref.read(chatControllerProvider).chatStream(widget.receiverUserId),
-        builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CustomLoader();
+      stream: ref.read(chatControllerProvider).chatStream(
+          widget.receiverUserId),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return const CustomLoader();
+        }
+        if (!snapshot.hasData || snapshot.data!.isEmpty) {
+          return  const Center(child: Text('No messages yet.'));
+        }
+        if (snapshot.hasError) {
+          return Center(child: Text('Error: ${snapshot.error}'));
+        }
+
+        SchedulerBinding.instance.addPostFrameCallback((_) {
+          // Only jump if there are new messages
+          if (snapshot.data!.length > previousMessageCount) {
+            messageController.jumpTo(
+                messageController.position.maxScrollExtent);
           }
-          SchedulerBinding.instance.addPostFrameCallback((_){
-            //this method let it scrollup to the max level i.e show the last message
-            messageController.jumpTo(messageController.position.maxScrollExtent);
-          });
-          return ListView.builder(
-            controller: messageController  ,
-            itemCount: snapshot.data!.length,
-            itemBuilder: (context, index) {
-              final messagesData = snapshot.data![index];
-              var timeSent = DateFormat.Hm().format(messagesData.timeSent);
-              if (messagesData.senderId ==
-                  FirebaseAuth.instance.currentUser!.uid) { //for my message
-                return MyMessageCard(
-                  message: messagesData.text,
-                  date: timeSent,
-                );
-              }
-              return SenderMessageCard(
-                message: messagesData.text,
-                date: timeSent,
-              );
-            },
-          );
         });
+
+        return ListView.builder(
+          controller: messageController,
+          itemCount: snapshot.data!.length,
+          itemBuilder: (context, index) {
+            final messageData = snapshot.data![index];
+            var timeSent = DateFormat.Hm().format(messageData.timeSent);
+            if (messageData.senderId ==
+                FirebaseAuth.instance.currentUser!.uid) {
+              return MyMessageCard(message: messageData.text, date: timeSent);
+            }
+            return SenderMessageCard(message: messageData.text, date: timeSent);
+          },
+        );
+      },
+    );
   }
-  @override
+    @override
   void dispose() {
-    messageController.dispose();
     super.dispose();
+    messageController.dispose();
   }
 }
