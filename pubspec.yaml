@@ -38,9 +38,12 @@ dependencies:
   country_picker:
   image_picker:
   cached_network_image:
+  cached_video_player_plus:
   flutter_contacts:
   uuid:
   intl:
+  emoji_picker_flutter:
+
 
  #firebase
   firebase_auth:

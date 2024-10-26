@@ -13,12 +13,33 @@ Future<File?> pickImageFromGallery(BuildContext context) async {
   try {
     final ImagePicker picker = ImagePicker();
 // Pick an image.
-    final PickedImage = await picker.pickImage(source: ImageSource.gallery);
-    if (PickedImage != null) {
-      image = File(PickedImage.path);
+    final pickedImage = await picker.pickImage(source: ImageSource.gallery);
+    if (pickedImage != null) {
+      image = File(pickedImage.path);
     }
   } catch (e) {
     showSnackBar(context: context, content: e.toString());
   }
   return image;
+}
+
+//pick video
+Future<File?> pickVideoFromGallery(BuildContext context) async {
+  File? video;
+  try {
+    final ImagePicker videoPicker = ImagePicker();
+// Pick an image.
+    final pickedVideo = await videoPicker.pickVideo(source: ImageSource.gallery);
+    if (pickedVideo != null) {
+      video = File(pickedVideo.path);
+    }
+  } catch (e) {
+    showSnackBar(context: context, content: e.toString());
+  }
+  return video;
+}
+pickGIF(BuildContext context) async {
+// watch from 6: to ,to hav understanding of file add
+      showSnackBar(context: context, content:"coming soon");
+
 }
