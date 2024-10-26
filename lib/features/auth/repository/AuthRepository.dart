@@ -8,7 +8,7 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:whatsapp_ui/common/repository/common_firebase_storage_repository.dart';
 import 'package:whatsapp_ui/common/util/constants.dart';
-import 'package:whatsapp_ui/common/util/custom_snackbar.dart';
+import 'package:whatsapp_ui/common/util/utils.dart';
 import 'package:whatsapp_ui/features/auth/screen/otp_screen.dart';
 import 'package:whatsapp_ui/features/auth/screen/user_information_screen.dart';
 import 'package:whatsapp_ui/model/user_model.dart';

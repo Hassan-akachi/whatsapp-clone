@@ -3,7 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_contacts/flutter_contacts.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:whatsapp_ui/common/util/custom_snackbar.dart';
+import 'package:whatsapp_ui/common/util/utils.dart';
 import 'package:whatsapp_ui/model/user_model.dart';
 import 'package:whatsapp_ui/features/chat/screen/mobile_chat_screen.dart';
 

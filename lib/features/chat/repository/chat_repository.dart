@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:uuid/uuid.dart';
-import 'package:whatsapp_ui/common/util/custom_snackbar.dart';
+import 'package:whatsapp_ui/common/repository/common_firebase_storage_repository.dart';
+import 'package:whatsapp_ui/common/util/utils.dart';
 import 'package:whatsapp_ui/model/chat_contact.dart';
 import 'package:whatsapp_ui/model/message.dart';
 import 'package:whatsapp_ui/model/user_model.dart';
@@ -19,7 +22,7 @@ class ChatRepository {
 
   ChatRepository({required this.auth, required this.firestore});
 
-  void _saveDataToContactSubCollection(
+  void _saveDataToContactSubCollection( //only save data to display on the chat contact list
       UserModel senderUserData,
       UserModel receivedUserData,
       String text,
@@ -54,7 +57,7 @@ class ChatRepository {
         .set(senderChatContact.toMap());
   }
 
-  void _saveMessageToMessageSubcollection(
+  void _saveMessageToMessageSubcollection( //this method save the messages for each contact chat list /history
       {required String receiverUserId,
       required String text,
       required DateTime timeSent,
@@ -170,7 +173,8 @@ class ChatRepository {
         .collection('chats')
         .doc(receiverUserId)
         .collection('messages')
-        .orderBy('timeSent', descending: false) // Sort by time sent in descending order
+        .orderBy('timeSent',
+            descending: false) // Sort by time sent in descending order
         .limit(100) // Retrieve the 100 latest messages
         .snapshots()
         .map((snapshot) {
@@ -187,4 +191,51 @@ class ChatRepository {
     });
   }
 
+// sending image or file
+  void sendFileMessage(
+      {required BuildContext context,
+      required File file,
+      required String recieverUserId,
+      required UserModel senderUserData,
+      required ProviderRef ref,
+      required MessageEnum messageEnum}) async {
+    try {
+      var timeSent = DateTime.now();
+      var messageId = const Uuid().v1();
+
+      String imageUrl = await ref
+          .read(commonFirebaseStorageRepositoryProvider) //send file to the firebase storage
+          .storeFileToFirebase(
+              'chat/${messageEnum.type}/${senderUserData.uid}/${recieverUserId}/$messageId',
+              file);
+
+      UserModel recieverUserData;
+
+      var userDataMap =
+          await firestore.collection('users').doc(recieverUserId).get();
+      recieverUserData = UserModel.fromMap(userDataMap.data()!);
+      String contactMsg;
+      switch (messageEnum) {
+        case MessageEnum.image:
+          contactMsg = '📷 photo';
+          break;
+        case MessageEnum.video:
+          contactMsg = '📹 video';
+          break;
+        case MessageEnum.audio:
+          contactMsg = '🕪 Audio';
+          break;
+        case MessageEnum.gif:
+          contactMsg ="GIF";
+          break;
+        default:
+          contactMsg ="MISTAKE";
+      }
+      _saveDataToContactSubCollection(
+          senderUserData, recieverUserData, contactMsg, timeSent, recieverUserId);
+      _saveMessageToMessageSubcollection(receiverUserId: recieverUserId, text: imageUrl, timeSent: timeSent, messageId: messageId, username: senderUserData.name, receiverUsername: recieverUserData.name, messageType: messageEnum,);
+    } catch (e) {
+      showSnackBar(context: context, content: e.toString());
+    }
+  }
 }
