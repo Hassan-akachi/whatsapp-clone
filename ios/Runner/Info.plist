@@ -49,5 +49,7 @@
     <string>Microphone Library Use </string>
     <key>NSContactsUsageDescription</key>
     <string>Reason we need access to the contact list</string>
+    <key>NSAppleMusicUsageDescription</key>
+    <string>need to use the audio play and recording</string>
 </dict>
 </plist>
