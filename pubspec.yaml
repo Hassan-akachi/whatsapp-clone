@@ -47,6 +47,7 @@ dependencies:
   path_provider: ^2.0.11
   permission_handler: ^9.2.0
   audioplayers:
+  swipe_to:
  #firebase
   firebase_auth:
   cloud_firestore:

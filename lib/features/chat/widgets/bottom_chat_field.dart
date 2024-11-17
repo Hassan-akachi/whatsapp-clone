@@ -7,7 +7,9 @@ import 'package:flutter_sound/flutter_sound.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:whatsapp_ui/common/enums/message_enums.dart';
+import 'package:whatsapp_ui/common/provider/message_reply_provider.dart';
 import 'package:whatsapp_ui/features/chat/controller/chat_controller.dart';
+import 'package:whatsapp_ui/features/chat/widgets/mesage_reply_preview.dart';
 
 import '../../../colors.dart';
 import '../../../common/util/utils.dart';
@@ -64,6 +66,7 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
         isRecording = !isRecording;
       });
     }
+
   }
 
   void selectFileMessage(File file, MessageEnum messageEnum) {
@@ -116,8 +119,11 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
 
   @override
   Widget build(BuildContext context) {
+    final messageReply = ref.watch(messageReplyProvider);
+    final isShowMessageReply =messageReply != null;  // Check if messageReply is not null
     return Column(
       children: [
+        isShowMessageReply ? const MessageReplyPreview() : const SizedBox(),
         Row(
           children: [
             Expanded(
