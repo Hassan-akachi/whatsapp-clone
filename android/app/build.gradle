@@ -28,6 +28,7 @@ apply plugin: 'com.google.gms.google-services'
 apply plugin: 'kotlin-android'
 apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
 
+
 android {
     compileSdkVersion 34
 
@@ -74,7 +75,7 @@ dependencies {
     implementation 'com.android.support:multidex:1.0.3'
     implementation(platform("com.google.firebase:firebase-bom:33.0.0"))
     implementation "com.google.firebase:firebase-analytics"
-    implementation 'com.google.firebase:firebase-appcheck:16.0.0'
+
     // Add the dependency for the Firebase Authentication library
     // When using the BoM, you don't specify versions in Firebase library dependencies
     implementation "com.google.firebase:firebase-auth"

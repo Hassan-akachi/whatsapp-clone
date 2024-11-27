@@ -16,10 +16,12 @@ import '../../../common/util/utils.dart';
 
 class BottomChatField extends ConsumerStatefulWidget {
   final String receiverUserId;
+  final bool isGroupChat;
 
   const BottomChatField({
     Key? key,
     required this.receiverUserId,
+    required this.isGroupChat
   }) : super(key: key);
 
   @override
@@ -45,7 +47,9 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
   void sendTextMessage() async {
     if (isShowSendButton) {
       ref.read(chatControllerProvider).sendTextMessage(
-          context, _messageController.text.trim(), widget.receiverUserId);
+          context, _messageController.text.trim(),
+          widget.receiverUserId,
+          widget.isGroupChat);
       setState(() {
         _messageController.text = "";
       });
@@ -73,7 +77,11 @@ class _BottomChatFieldState extends ConsumerState<BottomChatField> {
     // get the file to send e.g image,video,audio e.t.c
     ref
         .read(chatControllerProvider)
-        .sendFileMessage(context, file, widget.receiverUserId, messageEnum);
+        .sendFileMessage(context,
+        file,
+        widget.receiverUserId,
+        messageEnum,
+        widget.isGroupChat);
   }
 
   void selectImage() async {

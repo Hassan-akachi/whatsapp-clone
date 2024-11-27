@@ -48,11 +48,13 @@ dependencies:
   permission_handler: ^9.2.0
   audioplayers:
   swipe_to:
- #firebase
+  story_view:
+#firebase
   firebase_auth:
   cloud_firestore:
   firebase_core:
   firebase_storage:
+
 
 #state_dependencies
   flutter_riverpod:

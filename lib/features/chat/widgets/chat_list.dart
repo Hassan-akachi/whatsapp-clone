@@ -14,10 +14,12 @@ import '../../../model/message.dart';
 
 class ChatList extends ConsumerStatefulWidget {
   final String receiverUserId;
+  final bool isGroupChat;
 
   const ChatList({
     Key? key,
     required this.receiverUserId,
+    required this.isGroupChat
   }) : super(key: key);
 
   @override
@@ -39,8 +41,8 @@ class _ChatListState extends ConsumerState<ChatList> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<List<Message>>(
-      stream:
-          ref.read(chatControllerProvider).chatStream(widget.receiverUserId),
+      stream:widget.isGroupChat ? ref.read(chatControllerProvider).groupChatStream(widget.receiverUserId)
+         : ref.read(chatControllerProvider).chatStream(widget.receiverUserId),
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return const CustomLoader();
@@ -66,6 +68,9 @@ class _ChatListState extends ConsumerState<ChatList> {
           itemBuilder: (context, index) {
             final messageData = snapshot.data![index];
             var timeSent = DateFormat.Hm().format(messageData.timeSent);
+            if(!messageData.isSeen && messageData.recieverid == FirebaseAuth.instance.currentUser!.uid){
+              ref.read(chatControllerProvider).setChatMessageSeen(context, widget.receiverUserId, messageData.messageId);
+            }
             if (messageData.senderId ==
                 FirebaseAuth.instance.currentUser!.uid) {
               return MyMessageCard(
@@ -77,6 +82,7 @@ class _ChatListState extends ConsumerState<ChatList> {
                 username: messageData.repliedTo,
                 repliedText: messageData.repliedMessage,
                 repliedMessageType: messageData.repliedMessageType,
+                isSeen : messageData.isSeen
               );
             }
             return SenderMessageCard(

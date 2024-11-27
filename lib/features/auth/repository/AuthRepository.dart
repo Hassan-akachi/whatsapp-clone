@@ -53,7 +53,7 @@ class AuthRepository {
   void signInWithPhone(BuildContext context, String phoneNumber) async {
     // setting phone
     try {
-       await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
+        // await FirebaseAuth.instance.setPersistence(Persistence.LOCAL);
       await auth.verifyPhoneNumber(
           phoneNumber: phoneNumber,
           verificationCompleted: (PhoneAuthCredential credential) async {
