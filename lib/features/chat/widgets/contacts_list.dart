@@ -39,6 +39,7 @@ class ContactsList extends ConsumerWidget {
                                 arguments: {
                                   'name': groupData.name,
                                   'uid': groupData.groupId,
+                                  'profilePic': groupData.groupPic,
                                   'isGroupChat': true
                                 });
                           },
@@ -103,6 +104,7 @@ class ContactsList extends ConsumerWidget {
                                 arguments: {
                                   'name': chatContactData.name,
                                   'uid': chatContactData.contactId,
+                                  'profilePic': chatContactData.profilePic,
                                   'isGroupChat': false
                                 });
                           },
